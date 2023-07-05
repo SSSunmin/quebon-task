@@ -1,11 +1,21 @@
-import { MiniButton, CountInput } from "@/styled-components/styled-components";
+import {
+  MiniButton,
+  CountInput,
+  AmountCounterWrapper,
+} from "@/styled-components/styled-components";
 import { ChangeEvent, useState } from "react";
 
 interface CounterProps {
+  amountProps?: number;
   setCardAmount: (amount: number) => void;
+  isShoppingBasket: boolean;
 }
-const AmountCounter = ({ setCardAmount }: CounterProps) => {
-  const [amount, setAmount] = useState(1);
+const AmountCounter = ({
+  setCardAmount,
+  isShoppingBasket,
+  amountProps,
+}: CounterProps) => {
+  const [amount, setAmount] = useState(amountProps ? amountProps : 1);
 
   const AddCounter = () => {
     setAmount((prev) => prev + 1);
@@ -27,10 +37,11 @@ const AmountCounter = ({ setCardAmount }: CounterProps) => {
   };
 
   return (
-    <div>
+    <AmountCounterWrapper isShoppingBasket={isShoppingBasket}>
       <MiniButton
         onClick={SubtractCounter}
         disabled={amount < 2 ? true : false}
+        isShoppingBasket={isShoppingBasket}
       >
         -
       </MiniButton>
@@ -38,9 +49,12 @@ const AmountCounter = ({ setCardAmount }: CounterProps) => {
         type="text"
         value={amount}
         onChange={(e) => CountInputHandler(e)}
+        isShoppingBasket={isShoppingBasket}
       />
-      <MiniButton onClick={AddCounter}>+</MiniButton>
-    </div>
+      <MiniButton onClick={AddCounter} isShoppingBasket={isShoppingBasket}>
+        +
+      </MiniButton>
+    </AmountCounterWrapper>
   );
 };
 export default AmountCounter;
