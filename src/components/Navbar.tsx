@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useRecoilValue } from "recoil";
+import { TotlaCartCount } from "@/RecoilState";
 
 const menuList = [
   { name: "상품 목록", path: "/product" },
@@ -33,11 +35,12 @@ const Badge = styled.span`
   font-weight: 600;
   position: absolute;
   top: -5px;
-  right: -25px;
+  right: -20px;
 `;
 
 const Navbar = () => {
   const router = useRouter();
+  const TotalCount = useRecoilValue(TotlaCartCount);
   return (
     <Menu>
       <Image
@@ -55,7 +58,7 @@ const Navbar = () => {
       ))}
       <span style={{ position: "relative" }}>
         <AiOutlineShoppingCart size={30} />
-        <Badge>10</Badge>
+        <Badge>{TotalCount}</Badge>
       </span>
     </Menu>
   );
