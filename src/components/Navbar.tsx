@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <Menu>
       <Image
-        src={"/logo.png"}
+        src={"/logo1.png"}
         width={150}
         height={50}
         alt="logo"
