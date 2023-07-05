@@ -1,31 +1,51 @@
 import { atom, selector } from "recoil";
-
+import { recoilPersist } from "recoil-persist";
 export interface CartProps {
   id: number;
-  name: string;
+  title: string;
   price: number;
   amount: number;
-  img: string;
+  image: string;
 }
 
-export const CartInfo = atom<CartProps[]>({
-  key: "CartInfo",
+const localStorage =
+  typeof window !== "undefined" ? window.localStorage : undefined;
+
+const { persistAtom } = recoilPersist({
+  key: "shoppingBasketList",
+  storage: localStorage,
+  converter: JSON,
+});
+
+export const SelectProduct = atom<number[]>({
+  key: "SelectProduct",
   default: [],
   effects: [
     ({ onSet }) => {
-      onSet((data) => {
-        console.log("Current data", data);
+      onSet((newdate) => {
+        console.log("SelectProduct", newdate);
       });
     },
   ],
 });
 
-export const TotlaCartCount = selector({
-  key: "TotlaCartCount",
+export const CartInfo = atom<CartProps[]>({
+  key: "CartInfo",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const TotlaCartPrice = selector({
+  key: "TotlaCartPrice",
   get: ({ get }) => {
     const cartList = get(CartInfo);
-    let TotalAmount = 0;
-    cartList.map((list) => (TotalAmount += list.amount));
-    return TotalAmount;
+    const Selected = get(SelectProduct);
+    let TotalPrice = 0;
+    cartList.map((list, index) => {
+      if (Selected.indexOf(list.id) !== -1) {
+        TotalPrice += list.price * list.amount;
+      }
+    });
+    return TotalPrice.toFixed(2);
   },
 });
