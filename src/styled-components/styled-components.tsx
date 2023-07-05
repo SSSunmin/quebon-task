@@ -1,6 +1,7 @@
 "use client";
 import styled from "@emotion/styled";
 
+/* 상품 상세페이지 */
 export const DetailPageRoot = styled.div`
   display: flex;
   justify-content: center;
@@ -28,7 +29,7 @@ export const ProductInfo = styled.div`
     justify-content: flex-start;
   }
 `;
-export const ProductTitle = styled.p`
+export const ProductName = styled.p`
   font-size: 30px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -41,9 +42,23 @@ export const ProductPrice = styled.p`
   text-align: end;
 `;
 
-export const Button = styled.button`
+export const CartButton = styled.button`
   width: 100%;
   background-color: beige;
   padding: 15px 0px;
   border-radius: 8px;
+`;
+
+export const CountInput = styled.input`
+  border: 2px solid lightgray;
+  height: 36px;
+  width: 60px;
+  text-align: center;
+`;
+
+export const MiniButton = styled.button`
+  background-color: lightgray;
+  margin-bottom: 20px;
+  height: 40px;
+  width: 40px;
 `;
