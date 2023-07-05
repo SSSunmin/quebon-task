@@ -1,6 +1,7 @@
 "use client";
 import { productData } from "@/app/product/page";
 import styled from "@emotion/styled";
+import { useRouter } from "next/navigation";
 
 const Card = styled.div`
   display: flex;
@@ -48,8 +49,9 @@ const Desc = styled(EllipsisText)`
 `;
 
 const ProductCard = (cardProps: productData) => {
+  const router = useRouter();
   return (
-    <Card onClick={() => console.log(cardProps)}>
+    <Card onClick={() => router.push(`/product/${cardProps.id}`)}>
       <img src={cardProps.image} alt={cardProps.title} />
       <Title>{cardProps.title}</Title>
       <Price>{`$${cardProps.price}`}</Price>
