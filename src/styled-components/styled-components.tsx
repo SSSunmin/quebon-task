@@ -1,16 +1,71 @@
 "use client";
 import styled from "@emotion/styled";
 
+export const MainSection = styled.div`
+  padding: 100px;
+`;
 export const ColumnFlexDiv = styled.div`
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
 `;
-export const FlexDiv = styled.div`
+export const FlexDiv = styled(MainSection)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 76px);
+`;
+
+/* 상품 목록 페이지 */
+export const GridDiv = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 250px);
+  gap: 20px;
+`;
+
+export const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  :hover {
+    box-shadow: 0px 0px 20px 1px gray;
+  }
+  img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+    object-fit: contain;
+  }
+`;
+
+export const EllipsisText = styled.p`
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+`;
+
+export const Title = styled(EllipsisText)`
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 10px;
+  -webkit-line-clamp: 2;
+`;
+
+export const Price = styled.p`
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+
+export const Desc = styled(EllipsisText)`
+  font-size: 15px;
+  -webkit-line-clamp: 3;
 `;
 
 /* 상품 상세페이지 */
@@ -108,4 +163,66 @@ export const MediumParagraph = styled.p`
 export const LargeParagraph = styled.p`
   width: 400px;
   text-align: center;
+`;
+
+/* 결제완료 창 */
+export const PurchaseInfoWrapper = styled(ColumnFlexDiv)`
+  justify-content: space-evenly;
+`;
+export const PurchaseInfoBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid gray;
+  :first-child {
+    padding-top: 20px;
+    border-top: 2px solid gray;
+  }
+  :last-child {
+    margin-bottom: 0px;
+  }
+`;
+export const PurchasePriceBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+`;
+export const ModalBackGround = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Modal = styled.div`
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-4rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  position: fixed;
+  width: 45vw;
+  height: 45vh;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  z-index: 60;
+  padding: 30px 20px;
+  animation: slide-down 500ms ease-out forwards;
 `;
