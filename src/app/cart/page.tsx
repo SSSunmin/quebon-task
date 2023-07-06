@@ -4,6 +4,7 @@ import {
   SelectProduct,
   SelectedCartInfo,
   TotlaCartPrice,
+  useSsrComplectedState,
 } from "@/RecoilState";
 import BasketCard from "@/components/BasketCard";
 import PurchasePopup from "@/components/PurchasePopup";
@@ -15,11 +16,15 @@ import {
   LargeParagraph,
   FlexDiv,
   TableHead,
-  CheckBox,
   PurchaseInfoBox,
   SmallButton,
   PurchaseInfoWrapper,
   PurchasePriceBox,
+  breakpoints,
+  CheckBoxWrapper,
+  SelectPurchaseDiv,
+  PurchaseInfoBoxWrapper,
+  PriceAndAmountBox,
 } from "@/styled-components/styled-components";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -32,7 +37,22 @@ const Cart = () => {
   const TotalPrice = useRecoilValue(TotlaCartPrice);
   const selectedProduct = useRecoilValue(SelectedCartInfo);
   const DeleteShoppingBasket = useDeleteList();
+  const setSSrCompleted = useSsrComplectedState();
+  const [width, setWidth] = useState(window.innerWidth);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(setSSrCompleted, [setSSrCompleted]);
   useEffect(() => {
     if (selected.length === CartList.length && selected.length > 0) {
       setAllCheck(true);
@@ -64,19 +84,24 @@ const Cart = () => {
         flexDirection: "column",
       }}
     >
-      <TableHead>
-        <CheckBox
-          type="checkbox"
-          checked={allCheck}
-          onChange={(e) => CheckBoxHandler(e)}
-        />
-        <MediumParagraph>이미지</MediumParagraph>
-        <LargeParagraph>제품명</LargeParagraph>
-        <MediumParagraph>판매가</MediumParagraph>
-        <MediumParagraph>수량</MediumParagraph>
-        <MediumParagraph>구매가</MediumParagraph>
-        <SmallParagraph>선택</SmallParagraph>
-      </TableHead>
+      {width > 768 && (
+        <TableHead>
+          <CheckBoxWrapper>
+            <input
+              type="checkbox"
+              checked={allCheck}
+              onChange={(e) => CheckBoxHandler(e)}
+            />
+          </CheckBoxWrapper>
+
+          <MediumParagraph>이미지</MediumParagraph>
+          <LargeParagraph>제품명</LargeParagraph>
+          <MediumParagraph>판매가</MediumParagraph>
+          <MediumParagraph>수량</MediumParagraph>
+          <MediumParagraph>구매가</MediumParagraph>
+          <SmallParagraph>선택</SmallParagraph>
+        </TableHead>
+      )}
       {CartList.map((data) => (
         <BasketCard
           key={data.title}
@@ -85,42 +110,39 @@ const Cart = () => {
           ShowPurchasePopup={ShowPurchasePopup}
         />
       ))}
-      <div
-        style={{
-          marginTop: "20px",
-        }}
-      >
+      <SelectPurchaseDiv>
         <span
           style={{
-            marginRight: "200px",
+            marginRight: "10vw",
             lineHeight: "16px",
-            fontSize: "20px",
+            fontSize: "1.1rem",
             fontWeight: 600,
           }}
-        >{`선택상품 총 합계 : $ ${TotalPrice}`}</span>
+        >{`선택 상품 총 합계 : $ ${TotalPrice}`}</span>
         <Button
-          style={{ marginRight: "50px" }}
           disabled={TotalPrice === "0.00" ? true : false}
           onClick={ShowPurchasePopup}
         >
           선택상품 구매하기
         </Button>
-      </div>
+      </SelectPurchaseDiv>
       {show && (
         <PurchasePopup>
           <PurchaseInfoWrapper>
-            <div style={{ width: "100%" }}>
+            <PurchaseInfoBoxWrapper style={{ width: "100%" }}>
               {selectedProduct.map((info) => (
                 <PurchaseInfoBox key={info.id}>
                   <MediumParagraph>{info.title}</MediumParagraph>
-                  <span>{`$ ${info.price}`}</span>
-                  <span>X</span>
-                  <span>{info.amount}</span>
-                  <span>=</span>
-                  <span>{`$ ${info.price * info.amount}`}</span>
+                  <PriceAndAmountBox>
+                    <span>{`$ ${info.price}`}</span>
+                    <span>X</span>
+                    <span>{info.amount}</span>
+                    <span>=</span>
+                    <span>{`$ ${info.price * info.amount}`}</span>
+                  </PriceAndAmountBox>
                 </PurchaseInfoBox>
               ))}
-            </div>
+            </PurchaseInfoBoxWrapper>
             <PurchasePriceBox>
               <p>총 결제금액</p>
               <p>{`$ ${TotalPrice}`}</p>

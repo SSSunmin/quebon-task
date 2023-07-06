@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom, selector, useSetRecoilState, AtomEffect } from "recoil";
 import { recoilPersist } from "recoil-persist";
 export interface CartProps {
   id: number;
@@ -8,6 +8,15 @@ export interface CartProps {
   image: string;
 }
 
+const ssrCompleted = atom({
+  key: "ssrCompleted",
+  default: false,
+});
+
+export const useSsrComplectedState = () => {
+  const setSsrCompleted = useSetRecoilState(ssrCompleted);
+  return () => setSsrCompleted(true);
+};
 const localStorage =
   typeof window !== "undefined" ? window.localStorage : undefined;
 
@@ -16,6 +25,10 @@ const { persistAtom } = recoilPersist({
   storage: localStorage,
   converter: JSON,
 });
+
+export const persistAtomEffect = <T,>(param: Parameters<AtomEffect<T>>[0]) => {
+  param.getPromise(ssrCompleted).then(() => persistAtom(param));
+};
 
 export const SelectProduct = atom<number[]>({
   key: "SelectProduct",
@@ -32,7 +45,7 @@ export const SelectProduct = atom<number[]>({
 export const CartInfo = atom<CartProps[]>({
   key: "CartInfo",
   default: [],
-  effects_UNSTABLE: [persistAtom],
+  effects_UNSTABLE: [persistAtomEffect],
 });
 
 export const TotlaCartPrice = selector({
