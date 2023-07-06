@@ -23,15 +23,16 @@ const getSingleData = async (id: number) => {
   return res.json();
 };
 
-const DetailPage = ({ params }: { params: { id: number } }) => {
+const DetailPage = ({ params }: { params: { id: string[] } }) => {
   const [data, setData] = useState<productData>();
   const [amount, setAmount] = useState(1);
   const setSelected = useSetRecoilState(SelectProduct);
   const UpdateShoppingBasket = useUpdateList();
+  const id = parseInt(params.id[0]);
 
   useEffect(() => {
     const datafetch = async () => {
-      const data: productData = await getSingleData(params.id);
+      const data: productData = await getSingleData(id);
       if (data != null) {
         setData(data);
       }
