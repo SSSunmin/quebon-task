@@ -1,4 +1,5 @@
 import ProductCard from "@/components/ProductCard";
+import { FlexDiv, GridDiv } from "@/styled-components/styled-components";
 
 export interface productData {
   id: number;
@@ -21,28 +22,17 @@ const Product = async () => {
   const data: productData[] = await getData();
 
   return (
-    <div
+    <FlexDiv
       style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        padding: "80px 0px",
-        boxSizing: "border-box",
         backgroundColor: "lightgray",
       }}
     >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 250px)",
-          gap: "20px",
-        }}
-      >
+      <GridDiv>
         {data.map((list) => (
           <ProductCard key={list.id} {...list} />
         ))}
-      </div>
-    </div>
+      </GridDiv>
+    </FlexDiv>
   );
 };
 export default Product;
