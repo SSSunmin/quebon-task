@@ -27,6 +27,7 @@ import {
   PriceAndAmountBox,
 } from "@/styled-components/styled-components";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const Cart = () => {
@@ -38,19 +39,8 @@ const Cart = () => {
   const selectedProduct = useRecoilValue(SelectedCartInfo);
   const DeleteShoppingBasket = useDeleteList();
   const setSSrCompleted = useSsrComplectedState();
-  const [width, setWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const isMobile = useMediaQuery({ query: `(min-width:768px)` });
 
   useEffect(setSSrCompleted, [setSSrCompleted]);
   useEffect(() => {
@@ -84,7 +74,7 @@ const Cart = () => {
         flexDirection: "column",
       }}
     >
-      {width > 768 && (
+      {isMobile && (
         <TableHead>
           <CheckBoxWrapper>
             <input
