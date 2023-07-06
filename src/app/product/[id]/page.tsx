@@ -10,9 +10,13 @@ import {
 import { useEffect, useState } from "react";
 import AmountCounter from "@/components/AmountCounter";
 import useUpdateList from "@/hooks/useUpdateList";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { SelectProduct } from "@/RecoilState";
 
 const getSingleData = async (id: number) => {
-  const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+  const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -22,6 +26,7 @@ const getSingleData = async (id: number) => {
 const DetailPage = ({ params }: { params: { id: number } }) => {
   const [data, setData] = useState<productData>();
   const [amount, setAmount] = useState(1);
+  const setSelected = useSetRecoilState(SelectProduct);
   const UpdateShoppingBasket = useUpdateList();
 
   useEffect(() => {
@@ -41,6 +46,12 @@ const DetailPage = ({ params }: { params: { id: number } }) => {
   if (data === undefined) {
     return;
   }
+
+  const UpdateHandler = () => {
+    UpdateShoppingBasket({ data, amount, isShoppingBasket: false });
+    setSelected([]);
+  };
+
   return (
     <DetailPageRoot>
       <div>
@@ -57,13 +68,7 @@ const DetailPage = ({ params }: { params: { id: number } }) => {
             setCardAmount={AmountHandler}
             isShoppingBasket={false}
           />
-          <CartButton
-            onClick={() =>
-              UpdateShoppingBasket({ data, amount, isShoppingBasket: false })
-            }
-          >
-            장바구니추가
-          </CartButton>
+          <CartButton onClick={UpdateHandler}>장바구니추가</CartButton>
         </div>
       </ProductInfo>
     </DetailPageRoot>
