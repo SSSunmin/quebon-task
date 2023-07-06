@@ -49,3 +49,18 @@ export const TotlaCartPrice = selector({
     return TotalPrice.toFixed(2);
   },
 });
+
+export const SelectedCartInfo = selector({
+  key: "SelectedCartInfo",
+  get: ({ get }) => {
+    const cartList = get(CartInfo);
+    const Selected = get(SelectProduct);
+    let selecedProoduct: CartProps[] = [];
+    cartList.map((list, index) => {
+      if (Selected.indexOf(list.id) !== -1) {
+        selecedProoduct.push(list);
+      }
+    });
+    return selecedProoduct;
+  },
+});
