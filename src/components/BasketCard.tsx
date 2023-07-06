@@ -12,10 +12,10 @@ import {
 import useUpdateList from "@/hooks/useUpdateList";
 import { useRecoilState } from "recoil";
 import useDeleteList from "@/hooks/useDeleteList";
-
 interface BasketCardProps {
   data: CartProps;
   checkValue: boolean;
+  ShowPurchasePopup: () => void;
 }
 
 const ProductImg = styled.img`
@@ -25,7 +25,11 @@ const ProductImg = styled.img`
   object-fit: contain;
 `;
 
-const BasketCard = ({ data, checkValue }: BasketCardProps) => {
+const BasketCard = ({
+  data,
+  checkValue,
+  ShowPurchasePopup,
+}: BasketCardProps) => {
   const [check, setCheck] = useState(checkValue);
   const [amount, setAmount] = useState(data.amount);
   const [selected, setselected] = useRecoilState(SelectProduct);
@@ -57,6 +61,11 @@ const BasketCard = ({ data, checkValue }: BasketCardProps) => {
     }
   };
 
+  const PurchaseButtonHandler = () => {
+    setselected([data.id]);
+    ShowPurchasePopup();
+  };
+
   return (
     <div
       style={{
@@ -85,7 +94,12 @@ const BasketCard = ({ data, checkValue }: BasketCardProps) => {
           width: "100px",
         }}
       >
-        <SmallButton style={{ marginBottom: "10px" }}>구매하기</SmallButton>
+        <SmallButton
+          style={{ marginBottom: "10px" }}
+          onClick={PurchaseButtonHandler}
+        >
+          구매하기
+        </SmallButton>
         <SmallButton onClick={DeleteHandler}>X 삭제</SmallButton>
       </ColumnFlexDiv>
     </div>
